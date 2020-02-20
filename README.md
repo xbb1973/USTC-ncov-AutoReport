@@ -10,6 +10,8 @@ python3 Autoreport.py data.json
 
 这里的 `data.json` 为一个示例。
 
+脚本每 12 小时打卡一次。
+
 ## post 数据生成方法
 
 使用 F12 开发者工具抓包之后得到数据，按照 json 格式写入 `data.json` 中。
