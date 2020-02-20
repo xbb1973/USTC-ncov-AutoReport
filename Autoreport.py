@@ -1,16 +1,18 @@
+# encoding=utf8
 import requests
 import json
 import smtplib
 import time
 import getpass
 import re
+import sys
 import argparse
 from email.mime.text import MIMEText
 from email.header import Header
 from bs4 import BeautifulSoup
 
 
-class GradeReminder(object):
+class AutoRepot(object):
     def __init__(self, stuid, password, data_path):
         self.stuid = stuid
         self.password = password
@@ -27,6 +29,7 @@ class GradeReminder(object):
         try:
             data = session.get(
                 "http://weixine.ustc.edu.cn/2020").text
+            data = data.encode('ascii','ignore').decode('utf-8','ignore')
             soup = BeautifulSoup(data, 'lxml')
             token = soup.find("input", {"name": "_token"})['value']
             
@@ -72,9 +75,9 @@ class GradeReminder(object):
 
         except ValueError:
             print("Error...")
-            #######################
+            ######################
             # self.send_mail(False)
-            #######################
+            ######################
 
     def send_mail(self, flag):
         #### Here is an example.
@@ -110,11 +113,11 @@ class GradeReminder(object):
         data = {
             'model': 'uplogin.jsp',
             'service': 'http://weixine.ustc.edu.cn/2020/caslogin',
-            'stuid': self.stuid,
+            'username': self.stuid,
             'password': str(self.password),
         }
         session = requests.Session()
-        print(session.post(url, data=data))
+        session.post(url, data=data)
 
         print("login...")
         return session
@@ -126,5 +129,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
     stuid = getpass.getpass('Please input your stuid: ')
     password = getpass.getpass('Please input your password: ')
-    my_grade_remainder = GradeReminder(stuid=stuid, password=password, data_path=args.data_path)
-    my_grade_remainder.main_loop()
+    autorepoter = AutoRepot(stuid=stuid, password=password, data_path=args.data_path)
+    autorepoter.main_loop()
