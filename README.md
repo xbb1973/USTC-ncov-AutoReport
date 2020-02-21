@@ -16,7 +16,17 @@ python3 Autoreport.py data.json
 
 使用 F12 开发者工具抓包之后得到数据，按照 json 格式写入 `data.json` 中。
 
-更多详情等待添加。
+1. 登录进入 `http://weixine.ustc.edu.cn/2020/`，打开开发者工具（Chrome 可以使用 F12 快捷键），选中 Network 窗口：
+
+![](./imgs/1.png)
+
+2. 点击确认上报，点击抓到的 `daliy_report` 请求，在 `Headers` 下面找到 `Form Data` 这就是每次上报提交的信息参数。
+
+![](./imgs/2.png)
+
+3. 将找到的 Data 除 `_token` （每次都会改变，所以不需要复制，脚本中会每次获取新的 token 并添加到要提交的数据中）外都复制下来，存放在 `data.json` 中，并参考示例文件转换为对应的格式。
+
+4. 尝试运行脚本。
 
 ## 另外的接口
 
