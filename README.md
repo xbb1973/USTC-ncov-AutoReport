@@ -34,4 +34,4 @@ python3 Autoreport.py data.json
 
 `send_mail` 使用的是第三方的 `smtp` 服务，需要输入第三方邮件服务的授权码。
 
-更多详情等待添加。
+可以参考对应邮箱的教程（例如：[QQ邮箱](https://service.mail.qq.com/cgi-bin/help?subtype=1&no=166&id=28)）开启服务，并在脚本中添加对应的邮箱，尝试运行。
