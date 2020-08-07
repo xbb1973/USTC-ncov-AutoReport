@@ -1,27 +1,17 @@
 # encoding=utf8
 import requests
 import json
-import smtplib
 import time
-import getpass
 import re
 import sys
 import argparse
-from email.mime.text import MIMEText
-from email.header import Header
 from bs4 import BeautifulSoup
 
-
-class AutoRepot(object):
+class Report(object):
     def __init__(self, stuid, password, data_path):
         self.stuid = stuid
         self.password = password
         self.data_path = data_path
-
-    def main_loop(self):
-        while True:
-            self.report()
-            time.sleep(43200)
 
     def report(self):
         session = self.login()
@@ -30,7 +20,7 @@ class AutoRepot(object):
         data = session.get(
             "http://weixine.ustc.edu.cn/2020").text
         data = data.encode('ascii','ignore').decode('utf-8','ignore')
-        soup = BeautifulSoup(data, 'lxml')
+        soup = BeautifulSoup(data, 'html.parser')
         token = soup.find("input", {"name": "_token"})['value']
 
         print("begin report...")
@@ -56,7 +46,7 @@ class AutoRepot(object):
         url = "http://weixine.ustc.edu.cn/2020/daliy_report"
         session.post(url, data=data, headers=headers)
         data = session.get("http://weixine.ustc.edu.cn/2020").text
-        soup = BeautifulSoup(data, 'lxml')
+        soup = BeautifulSoup(data, 'html.parser')
         pattern = re.compile("2020-0[0-9]-[0-9]{2}")
         token = soup.find(
             "span", {"style": "position: relative; top: 5px; color: #666;"})
@@ -68,45 +58,7 @@ class AutoRepot(object):
             print("Failed report.")
         else:
             print("Successful report.")
-        #######################
-        # self.send_mail(flag)
-        #######################
         print("end report...")
-
-#         except ValueError:
-#             print("Error...")
-            ######################
-            # self.send_mail(False)
-            ######################
-
-    def send_mail(self, flag):
-        #### Here is an example.
-        sender = 'xxxxxxxxxx@qq.com'
-        receiver = 'xxx@mail.ustc.edu.cn'
-
-        mail_host = "smtp.qq.com"
-        mail_user = "xxxxxxxxxx@qq.com"
-        mail_pwd = ''           # Fill in smtp password of your smtp service.
-
-        mail_content = 'Auto report content.'
-        if flag == True:
-            mail_title = 'Successful report'
-        else:
-            mail_title = 'Failed report'
-
-        smtp = smtplib.SMTP_SSL(mail_host)
-        # smtp.set_debuglevel(1)
-        # smtp.starttls()
-        smtp.ehlo(mail_host)
-        smtp.login(mail_user, mail_pwd)
-
-        msg = MIMEText(mail_content, "plain", "utf-8")
-        msg['Subject'] = Header(mail_title, 'utf-8')
-        msg['From'] = sender
-        msg['To'] = receiver
-
-        smtp.sendmail(sender, receiver, msg.as_string())
-        smtp.quit()
 
     def login(self):
         url = "https://passport.ustc.edu.cn/login?service=http%3A%2F%2Fweixine.ustc.edu.cn%2F2020%2Fcaslogin"
@@ -126,8 +78,8 @@ class AutoRepot(object):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='USTC nCov auto report script.')
     parser.add_argument('data_path', help='path to your own data used for post method', type=str)
+    parser.add_argument('stuid', help='your student number', type=str)
+    parser.add_argument('password', help='your CAS password', type=str)
     args = parser.parse_args()
-    stuid = getpass.getpass('Please input your stuid: ')
-    password = getpass.getpass('Please input your password: ')
-    autorepoter = AutoRepot(stuid=stuid, password=password, data_path=args.data_path)
-    autorepoter.main_loop()
+    autorepoter = Report(stuid=args.stuid, password=args.password, data_path=args.data_path)
+    autorepoter.report()
