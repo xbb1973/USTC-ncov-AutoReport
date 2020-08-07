@@ -1,24 +1,37 @@
 # 中科大健康打卡平台自动打卡脚本
 
+![Travis-CI](https://travis-ci.org/Violin9906/USTC-ncov-AutoReport.svg?branch=master&status=passed)
+![School](https://img.shields.io/badge/School-USTC-blue.svg)
+![Language](https://img.shields.io/badge/language-Python3-yellow.svg)
+![GitHub stars](https://img.shields.io/github/stars/Violin9906/USTC-ncov-AutoReport)
+
+## 说明
+
+本代码仓库fork自[ForeverFancy/USTC-ncov-AutoReport](https://github.com/ForeverFancy/USTC-ncov-AutoReport)，在此基础上引入了持续集成功能实现全自动打卡。
+
 ## 使用方法
 
-安装所需要的包：
+1. 将本代码仓库fork到自己的github。
 
-```shell
-pip3 install requests lxml beautifulsoup4 argparse 
-```
+2. 根据自己的实际情况修改data.json的数据，参看下文。**这里给出的 `data.json` 仅供参考。**
 
-`data.json` 为 `post` 方法需要使用的数据（也就是之前需要手动提交的数据）文件的路径。
+3. 将修改好的代码push至master分支。
 
-```shell
-python3 Autoreport.py data.json
-```
+4. 使用自己的github登陆travis-ci.org，启用本代码仓库的持续集成（如果找不到本仓库，请稍等一会后点击左侧Sync account）。
 
-这里的 `data.json` 为一个示例。
+   ![启用持续集成](./imgs/4.png)
 
-脚本每 12 小时打卡一次。
+5. 在settings页面添加两个环境变量，分别是`STUID`和`PASSWORD`，内容分别是自己的学号和统一身份认证的密码。**请注意不要启用后面的DISPLAY VALUE IN BUILD LOG，因为构建记录是任何人都可以访问的。**
 
-## post 数据生成方法
+   ![环境变量](./imgs/3.jpg)
+
+6. 在settings页面添加Cron Jobs，设置为master分支，Daily，Always Run。（**travis-ci不保证脚本执行的具体时间，所以最好不要在深夜添加这个Cron Job以免错过当天打卡**）
+
+   ![Cron Jobs](./imgs/5.png)
+
+7. 你可以随时访问travis-ci.org查看构建记录来确认打卡情况。
+
+## data.json 数据获取方法
 
 使用 F12 开发者工具抓包之后得到数据，按照 json 格式写入 `data.json` 中。
 
@@ -34,10 +47,3 @@ python3 Autoreport.py data.json
 
 4. 尝试运行脚本。
 
-## 另外的接口
-
-提供了 `send_mail` 接口，可以用于每次打卡提交之后向指定邮箱发送打卡结果，可以自己将接口做修改之后在 `report` 中调用。
-
-`send_mail` 使用的是第三方的 `smtp` 服务，需要输入第三方邮件服务的授权码。
-
-可以参考对应邮箱的教程（例如：[QQ邮箱](https://service.mail.qq.com/cgi-bin/help?subtype=1&no=166&id=28)）开启服务，并在脚本中添加对应的邮箱，尝试运行。
