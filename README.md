@@ -17,7 +17,7 @@
 
 3. 将修改好的代码push至master分支。
 
-4. 使用自己的github登陆travis-ci.org，启用本代码仓库的持续集成（如果找不到本仓库，请稍等一会后点击左侧Sync account）。
+4. 使用自己的github登陆[travis-ci.org](https://travis-ci.org)，启用本代码仓库的持续集成（如果找不到本仓库，请稍等一会后点击左侧Sync account）。
 
    ![启用持续集成](./imgs/4.png)
 
