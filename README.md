@@ -2,6 +2,12 @@
 
 ## 使用方法
 
+安装所需要的包：
+
+```shell
+pip3 install requests lxml beautifulsoup4 argparse 
+```
+
 `data.json` 为 `post` 方法需要使用的数据（也就是之前需要手动提交的数据）文件的路径。
 
 ```shell
