@@ -3,8 +3,9 @@
 name: Auto-report action
 
 on:
+  [push]
   schedule:
-    - cron: '10 0,4,13 * * *'
+    - cron: '30 0,4,13 * * *'
 
 jobs:
   build:
