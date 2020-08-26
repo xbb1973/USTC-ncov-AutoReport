@@ -2,8 +2,10 @@
 
 name: Auto-report action
 
-on:
-  [push]
+on: 
+  push:
+    branches:
+      - master
   schedule:
     - cron: '30 0,4,13 * * *'
 
