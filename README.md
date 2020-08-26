@@ -22,15 +22,15 @@
 
 3. 将修改好的代码push至master分支。
 
-4. 点击Actions选项卡，确认存在Auto-report action。
-
-   ![actions](imgs/image-20200826215120143.png)
+4. 点击Actions选项卡，点击"I understand my workflows, go ahead and enable them".
 
 5. 点击Settings选项卡，点击左侧Secrets，点击New secret，创建名为`STUID`，值为自己学号的secret。用同样方法，创建名为`PASSWORD`，值为自己统一身份认证密码的secret。这两个值不会被公开。
 
    ![secrets](imgs/image-20200826215037042.png)
 
 6. 默认的打卡时间是每天的早上7:30、中午12:30和晚上19:30，可能会有数分钟的浮动。如需选择其它时间，可以修改`.github/workflows/report.yml`中的`cron`，详细说明参见[安排的事件](https://docs.github.com/cn/actions/reference/events-that-trigger-workflows#scheduled-events)，请注意这里使用的是**国际标准时间UTC**，北京时间的数值比它大8个小时。
+
+7. 在Actions选项卡可以确认打卡情况。**本打卡脚本仅供学习使用，请勿过分依赖。**
 
 ## data.json 数据获取方法
 
