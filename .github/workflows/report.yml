@@ -4,7 +4,7 @@ name: Auto-report action
 
 on:
   schedule:
-    - cron: '0 8,12,21 * * *'
+    - cron: '10 0,4,13 * * *'
 
 jobs:
   build:
