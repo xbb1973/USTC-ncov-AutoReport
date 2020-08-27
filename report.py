@@ -2,6 +2,8 @@
 import requests
 import json
 import time
+import datetime
+import pytz
 import re
 import sys
 import argparse
@@ -16,14 +18,11 @@ class Report(object):
     def report(self):
         session = self.login()
         cookies = session.cookies
-#         try:
         data = session.get(
             "http://weixine.ustc.edu.cn/2020").text
         data = data.encode('ascii','ignore').decode('utf-8','ignore')
         soup = BeautifulSoup(data, 'html.parser')
         token = soup.find("input", {"name": "_token"})['value']
-
-        print("begin report...")
 
         with open(self.data_path, "r+") as f:
             data = f.read()
@@ -47,18 +46,25 @@ class Report(object):
         session.post(url, data=data, headers=headers)
         data = session.get("http://weixine.ustc.edu.cn/2020").text
         soup = BeautifulSoup(data, 'html.parser')
-        pattern = re.compile("2020-0[0-9]-[0-9]{2}")
+        pattern = re.compile("2020-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}")
         token = soup.find(
             "span", {"style": "position: relative; top: 5px; color: #666;"})
         flag = False
         if pattern.search(token.text) is not None:
             date = pattern.search(token.text).group()
-            flag = (time.strftime("%Y-%m-%d", time.localtime()) == date)
+            print("Latest report: " + date)
+            date = date + " +0800"
+            reporttime = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S %z")
+            timenow = datetime.datetime.now(pytz.timezone('Asia/Shanghai'))
+            delta = timenow - reporttime
+            print(delta.seconds)
+            if delta.seconds < 120:
+                flag = True
         if flag == False:
-            print("Failed report.")
+            print("Report FAILED!")
         else:
-            print("Successful report.")
-        print("end report...")
+            print("Report SUCCESSFUL!")
+        return flag
 
     def login(self):
         url = "https://passport.ustc.edu.cn/login?service=http%3A%2F%2Fweixine.ustc.edu.cn%2F2020%2Fcaslogin"
@@ -82,4 +88,14 @@ if __name__ == "__main__":
     parser.add_argument('password', help='your CAS password', type=str)
     args = parser.parse_args()
     autorepoter = Report(stuid=args.stuid, password=args.password, data_path=args.data_path)
-    autorepoter.report()
+    count = 3
+    while count != 0:
+        ret = autorepoter.report()
+        if ret != False:
+            break
+        print("Report Failed, retry...")
+        count = count - 1
+    if count != 0:
+        exit(0)
+    else:
+        exit(-1)
