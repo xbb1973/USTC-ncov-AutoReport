@@ -1,21 +1,19 @@
-# 中国滑稽大学健康打卡平台自动打卡脚本
+# 中国滑稽大学(University of Ridiculous of China)健康打卡平台自动打卡脚本
 
 ![Auto-report action](https://github.com/Violin9906/USTC-ncov-AutoReport/workflows/Auto-report%20action/badge.svg?branch=master&event=schedule)
-![School](https://img.shields.io/badge/School-USTC-blue.svg)
+![School](https://img.shields.io/badge/School-URC-blue.svg)
 ![Language](https://img.shields.io/badge/language-Python3-yellow.svg)
 ![GitHub stars](https://img.shields.io/github/stars/Violin9906/USTC-ncov-AutoReport)
 ![GitHub forks](https://img.shields.io/github/forks/Violin9906/USTC-ncov-AutoReport)
 
 ## 说明
 
-本代码仓库fork自[ForeverFancy/USTC-ncov-AutoReport](https://github.com/ForeverFancy/USTC-ncov-AutoReport)，在此基础上引入了持续集成功能实现全自动打卡。
-
 **本打卡脚本仅供学习交流使用，请勿过分依赖。开发者对使用或不使用本脚本造成的问题不负任何责任，不对脚本执行效果做出任何担保。**
 
 ## 更新记录
 
 - 20200827：增加打卡失败重试功能，增加License。
-- 20200826：为配合学校最新规定，切换至Github Action实现一天三次打卡
+- 20200826：为配合学校最新规定，切换至Github Actions实现一天三次打卡
 
 ## 使用方法
 
@@ -27,7 +25,7 @@
 
 4. 点击Actions选项卡，点击"I understand my workflows, go ahead and enable them".
 
-5. 点击Settings选项卡，点击左侧Secrets，点击New secret，创建名为`STUID`，值为自己学号的secret。用同样方法，创建名为`PASSWORD`，值为自己统一身份认证密码的secret。这两个值不会被公开。
+5. 点击Settings选项卡，点击左侧Secrets，点击New secret，创建名为`STUID`，值为自己学号的secret。用同样方法，创建名为`PASSWORD`，值为自己中国滑稽大学统一身份认证密码的secret。这两个值不会被公开。
 
    ![secrets](imgs/image-20200826215037042.png)
 
@@ -41,7 +39,7 @@
 
 使用 F12 开发者工具抓包之后得到数据，按照 json 格式写入 `data.json` 中。
 
-1. 登录进入 `http://weixine.ustc.edu.cn/2020/`，打开开发者工具（Chrome 可以使用 F12 快捷键），选中 Network 窗口：
+1. 登录进入 `http://weixine.自动打码.edu.cn/2020/`，打开开发者工具（Chrome 可以使用 F12 快捷键），选中 Network 窗口：
 
 ![](./imgs/1.png)
 
