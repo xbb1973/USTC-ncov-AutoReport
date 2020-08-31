@@ -16,10 +16,21 @@ class Report(object):
         self.data_path = data_path
 
     def report(self):
-        session = self.login()
-        cookies = session.cookies
-        data = session.get(
-            "http://weixine.ustc.edu.cn/2020").text
+        loginsuccess = False
+        retrycount = 5
+        while (not loginsuccess) and retrycount:
+            session = self.login()
+            cookies = session.cookies
+            getform = session.get("http://weixine.ustc.edu.cn/2020")
+            retrycount = retrycount - 1
+            if getform.url != "https://weixine.ustc.edu.cn/2020/home":
+                print("Login Failed! Retry...")
+            else:
+                print("Login Successful!")
+                loginsuccess = True
+        if not loginsuccess:
+            return False
+        data = getform.text
         data = data.encode('ascii','ignore').decode('utf-8','ignore')
         soup = BeautifulSoup(data, 'html.parser')
         token = soup.find("input", {"name": "_token"})['value']
@@ -57,7 +68,7 @@ class Report(object):
             reporttime = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S %z")
             timenow = datetime.datetime.now(pytz.timezone('Asia/Shanghai'))
             delta = timenow - reporttime
-            print(delta.seconds)
+            print("{} second(s) before.".format(delta.seconds))
             if delta.seconds < 120:
                 flag = True
         if flag == False:
@@ -82,13 +93,13 @@ class Report(object):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='USTC nCov auto report script.')
+    parser = argparse.ArgumentParser(description='URC nCov auto report script.')
     parser.add_argument('data_path', help='path to your own data used for post method', type=str)
     parser.add_argument('stuid', help='your student number', type=str)
     parser.add_argument('password', help='your CAS password', type=str)
     args = parser.parse_args()
     autorepoter = Report(stuid=args.stuid, password=args.password, data_path=args.data_path)
-    count = 3
+    count = 5
     while count != 0:
         ret = autorepoter.report()
         if ret != False:

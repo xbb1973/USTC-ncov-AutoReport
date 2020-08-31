@@ -1,0 +1,19 @@
+{
+    "now_address": "1",
+    "gps_now_address": "",
+    "now_province": "340000",
+    "gps_province": "",
+    "now_city": "340100",
+    "gps_city": "",
+    "now_detail": "",
+    "is_inschool": "5",
+    "body_condition": "1",
+    "body_condition_detail": "",
+    "now_status": "1",
+    "now_status_detail": "",
+    "has_fever": "0",
+    "last_touch_sars": "0",
+    "last_touch_sars_date": "",
+    "last_touch_sars_detail": "",
+    "other_detail": ""
+}
