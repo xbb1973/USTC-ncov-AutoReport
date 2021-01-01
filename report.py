@@ -24,7 +24,7 @@ class Report(object):
             getform = session.get("http://weixine.ustc.edu.cn/2020")
             retrycount = retrycount - 1
             if getform.url != "https://weixine.ustc.edu.cn/2020/home":
-                print("Login Failed! Retry...")
+                print("Login Failed! Retrying...")
             else:
                 print("Login Successful!")
                 loginsuccess = True
@@ -57,7 +57,7 @@ class Report(object):
         session.post(url, data=data, headers=headers)
         data = session.get("http://weixine.ustc.edu.cn/2020").text
         soup = BeautifulSoup(data, 'html.parser')
-        pattern = re.compile("2020-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}")
+        pattern = re.compile("202[0-9]-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}")
         token = soup.find(
             "span", {"style": "position: relative; top: 5px; color: #666;"})
         flag = False
