@@ -84,6 +84,9 @@ class Report(object):
             'service': 'https://weixine.ustc.edu.cn/2020/caslogin',
             'username': self.stuid,
             'password': str(self.password),
+            'warn': '',
+            'showCode': '',
+            'button': '',
         }
         session = requests.Session()
         session.post(url, data=data)
