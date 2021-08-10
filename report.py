@@ -16,16 +16,9 @@ class Report(object):
         self.data_path = data_path
 
     def report(self):
-        loginsuccess = False
-        retrycount = 5
-        while (not loginsuccess) and retrycount:
-            session = self.login()
-            cookies = session.cookies
-            getform = session.get("https://weixine.ustc.edu.cn/2020")
-            retrycount = retrycount - 1
-            loginsuccess = True
-        if not loginsuccess:
-            return False
+        session = self.login()
+        cookies = session.cookies
+        getform = session.get("https://weixine.ustc.edu.cn/2020")
         data = getform.text
         data = data.encode('ascii','ignore').decode('utf-8','ignore')
         soup = BeautifulSoup(data, 'html.parser')
@@ -98,14 +91,5 @@ if __name__ == "__main__":
     parser.add_argument('password', help='your CAS password', type=str)
     args = parser.parse_args()
     autorepoter = Report(stuid=args.stuid, password=args.password, data_path=args.data_path)
-    count = 5
-    while count != 0:
-        ret = autorepoter.report()
-        if ret != False:
-            break
-        print("Report Failed, retry...")
-        count = count - 1
-    if count != 0:
-        exit(0)
-    else:
-        exit(-1)
+    ret = autorepoter.report()
+    exit(0)
