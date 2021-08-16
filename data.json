@@ -5,6 +5,8 @@
     "gps_province": "",
     "now_city": "340100",
     "gps_city": "",
+    "now_country": "340102",
+    "gps_country": "",
     "now_detail": "",
     "is_inschool": "0",
     "body_condition": "1",
@@ -15,5 +17,6 @@
     "last_touch_sars": "0",
     "last_touch_sars_date": "",
     "last_touch_sars_detail": "",
+    "is_danger": "0",
     "other_detail": ""
 }
