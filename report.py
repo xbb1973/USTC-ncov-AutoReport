@@ -10,10 +10,13 @@ import argparse
 from bs4 import BeautifulSoup
 
 class Report(object):
-    def __init__(self, stuid, password, data_path):
+    def __init__(self, stuid, password, data_path, emer_name, emer_phone, emer_rela):
         self.stuid = stuid
         self.password = password
         self.data_path = data_path
+        self.emer_name = emer_name
+        self.emer_phone = emer_phone
+        self.emer_rela = emer_rela
 
     def report(self):
         session = self.login()
@@ -28,6 +31,9 @@ class Report(object):
             data = f.read()
             data = json.loads(data)
             data["_token"]=token
+            data["jinji_lxr"]=self.emer_name
+            data["jinji_guanxi"]=self.emer_rela
+            data["jiji_mobile"]=self.emer_phone
 
         headers = {
             'authority': 'weixine.ustc.edu.cn',
@@ -89,7 +95,10 @@ if __name__ == "__main__":
     parser.add_argument('data_path', help='path to your own data used for post method', type=str)
     parser.add_argument('stuid', help='your student number', type=str)
     parser.add_argument('password', help='your CAS password', type=str)
+    parser.add_argument('emer_name', help='emergency contact name', type=str)
+    parser.add_argument('emer_phone', help='emergency contact phone', type=str)
+    parser.add_argument('emer_rela', help='emergency contact relation', type=str)
     args = parser.parse_args()
-    autorepoter = Report(stuid=args.stuid, password=args.password, data_path=args.data_path)
+    autorepoter = Report(stuid=args.stuid, password=args.password, data_path=args.data_path, emer_name=args.emer_name, emer_phone=args.emer_phone, emer_rela=args.emer_rela)
     ret = autorepoter.report()
     exit(0)
