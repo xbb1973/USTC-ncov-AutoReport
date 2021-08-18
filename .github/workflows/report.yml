@@ -28,5 +28,8 @@ jobs:
       env:
         STUID: ${{ secrets.Stuid }}
         PASSWORD: ${{ secrets.Password }}
+        EMERNAME: ${{ secrets.Emername }}
+        EMERPHONE: ${{ secrets.Emerphone }}
+        EMERRELA: ${{ secrets.Emerrela }}
       run: |
-        python report.py data.json "$STUID" "$PASSWORD"
+        python report.py data.json "$STUID" "$PASSWORD" "$EMERNAME" "$EMERPHONE" "$EMERRELA"
