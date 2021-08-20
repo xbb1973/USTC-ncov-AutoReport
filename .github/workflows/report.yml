@@ -24,9 +24,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        sudo apt install tesseract-ocr
     - name: Run report script
       env:
         STUID: ${{ secrets.Stuid }}
         PASSWORD: ${{ secrets.Password }}
+        DATA_FILE: ${{ secrets.Data }}
       run: |
+        echo "$DATA_FILE" > ./data.json
         python report.py data.json "$STUID" "$PASSWORD"
