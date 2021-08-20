@@ -48,6 +48,20 @@
 pip install -r requirements.txt
 ```
 
+**安装 tesseract**
+
+macos:
+
+```sh
+brew install tesseract
+```
+
+ubuntu:
+
+```sh
+sudo apt install tesseract-ocr
+```
+
 ### 运行打卡程序
 
 ```shell
