@@ -10,10 +10,11 @@ import argparse
 from bs4 import BeautifulSoup
 
 class Report(object):
-    def __init__(self, stuid, password, data_path):
+    def __init__(self, stuid, password, data_path, jinji):
         self.stuid = stuid
         self.password = password
         self.data_path = data_path
+        self.jinji = jinji
 
     def report(self):
         loginsuccess = False
@@ -38,7 +39,10 @@ class Report(object):
         with open(self.data_path, "r+") as f:
             data = f.read()
             data = json.loads(data)
-            data["_token"]=token
+            jinji = self.jinji
+            jinji = json.loads(jinji)
+            data = {**data, **jinji}
+            data["_token"] = token
 
         headers = {
             'authority': 'weixine.ustc.edu.cn',
@@ -54,7 +58,7 @@ class Report(object):
         }
 
         url = "https://weixine.ustc.edu.cn/2020/daliy_report"
-        resp=session.post(url, data=data, headers=headers)
+        resp = session.post(url, data=data, headers=headers)
         data = session.get("https://weixine.ustc.edu.cn/2020").text
         soup = BeautifulSoup(data, 'html.parser')
         pattern = re.compile("202[0-9]-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}")
@@ -78,19 +82,22 @@ class Report(object):
         return flag
 
     def login(self):
-        url = "https://passport.ustc.edu.cn/login?service=http%3A%2F%2Fweixine.ustc.edu.cn%2F2020%2Fcaslogin"
+        url = "https://passport.ustc.edu.cn/login?service=https%3A%2F%2Fweixine.ustc.edu.cn%2F2020%2Fcaslogin"
+        session = requests.Session()
+        session.cookies.clear()
+        response = session.get(url)
+        CAS_LT = BeautifulSoup(response.text, 'lxml').find(attrs={'id': 'CAS_LT'}).get('value')
         data = {
             'model': 'uplogin.jsp',
+            'CAS_LT': CAS_LT,
             'service': 'https://weixine.ustc.edu.cn/2020/caslogin',
-            'username': self.stuid,
-            'password': str(self.password),
             'warn': '',
             'showCode': '',
+            'username': self.stuid,
+            'password': str(self.password),
             'button': '',
         }
-        session = requests.Session()
         session.post(url, data=data)
-
         print("login...")
         return session
 
@@ -100,8 +107,9 @@ if __name__ == "__main__":
     parser.add_argument('data_path', help='path to your own data used for post method', type=str)
     parser.add_argument('stuid', help='your student number', type=str)
     parser.add_argument('password', help='your CAS password', type=str)
+    parser.add_argument('jinji', help='紧急联系人', type=str)
     args = parser.parse_args()
-    autorepoter = Report(stuid=args.stuid, password=args.password, data_path=args.data_path)
+    autorepoter = Report(stuid=args.stuid, password=args.password, data_path=args.data_path, jinji=args.jinji)
     count = 5
     while count != 0:
         ret = autorepoter.report()
